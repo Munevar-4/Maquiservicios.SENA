@@ -1,0 +1,107 @@
+create database maquiservicios_db;
+use maquiservicios_db;
+
+-- CREACION DE LA TABLA DE ROLES
+CREATE TABLE IF NOT EXISTS ROLES
+(
+    id     INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255),
+    PRIMARY KEY (id)
+);
+INSERT INTO ROLES (nombre) VALUES ('Administrador');
+INSERT INTO ROLES (nombre) VALUES ('Operador');
+
+
+-- CREACION DE LA TABLA TIPO DE DOCUMENTO
+CREATE TABLE IF NOT EXISTS TIPOS_DOCUMENTO
+(
+    id     INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+-- CREACION DE LA TABLA DE USUARIOS
+CREATE TABLE IF NOT EXISTS USUARIOS
+(
+    id                INT NOT NULL AUTO_INCREMENT,
+    id_rol            INT NOT NULL,
+    id_tipo_documento INT,
+    nombres           VARCHAR(255),
+    contrasena        VARCHAR(255) NOT NULL,
+    usuario           VARCHAR(255) NOT NULL,
+    no_documento      VARCHAR(255),
+    correo            VARCHAR(255),
+    telefono          VARCHAR(255),
+    PRIMARY KEY (id),
+    CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol) REFERENCES ROLES (id),
+    CONSTRAINT fk_usuario_tipo_documento FOREIGN KEY (id_tipo_documento) REFERENCES TIPOS_DOCUMENTO (id)
+);
+
+-- CREACION DE LA TABLA TIPO MAQUINA
+CREATE TABLE IF NOT EXISTS TIPOS_MAQUINAS
+(
+    id     INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO TIPOS_MAQUINAS (nombre) VALUES ('Excavadora');
+INSERT INTO TIPOS_MAQUINAS (nombre) VALUES ('Retroexcavadora');
+INSERT INTO TIPOS_MAQUINAS (nombre) VALUES ('Minicargador');
+INSERT INTO TIPOS_MAQUINAS (nombre) VALUES ('Vibro Compactador');
+
+-- CREACION DE LA TABLA ESTADO
+CREATE TABLE IF NOT EXISTS ESTADOS_MAQUINA
+(
+    id     INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO ESTADOS_MAQUINA (nombre)
+VALUES ('ACTIVO');
+INSERT INTO ESTADOS_MAQUINA (nombre)
+VALUES ('INACTIVO');
+
+-- CREACION DE LA TABLA EMPRESAS
+CREATE TABLE IF NOT EXISTS EMPRESAS
+(
+    id     INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO EMPRESAS (nombre) VALUES ('Demoliciones');
+INSERT INTO EMPRESAS (nombre) VALUES ('Excavaciones Ya');
+
+-- CREACION DE LA TABLA MARCAS
+CREATE TABLE IF NOT EXISTS MARCAS
+(
+    id     INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO MARCAS (nombre) VALUES ('KOMATSU');
+INSERT INTO MARCAS (nombre) VALUES ('SHANTUI');
+INSERT INTO MARCAS (nombre) VALUES ('HITACHI');
+INSERT INTO MARCAS (nombre) VALUES ('CATERPILLAR');
+
+-- CREACION DE LA TABLA MAQUINAS
+CREATE TABLE IF NOT EXISTS MAQUINAS
+(
+    id              INT NOT NULL AUTO_INCREMENT,
+    id_marca        INT,
+    id_tipo_maquina INT NOT NULL,
+    id_estado       INT,
+    id_empresa      INT,
+    no_chasis       VARCHAR(255),
+    modelo          INT,
+    horometro       VARCHAR(255),
+    imagen VARCHAR(255) null,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_maquina_marca FOREIGN KEY (id_marca) REFERENCES MARCAS (id),
+    CONSTRAINT fk_maquina_tipo_maquina FOREIGN KEY (id_tipo_maquina) REFERENCES TIPOS_MAQUINAS (id),
+    CONSTRAINT fk_maquina_estado FOREIGN KEY (id_estado) REFERENCES ESTADOS_MAQUINA (id),
+    CONSTRAINT fk_maquina_empresa FOREIGN KEY (id_empresa) REFERENCES EMPRESAS (id)
+);
+
+
+
